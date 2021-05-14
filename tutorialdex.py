@@ -1,40 +1,12 @@
-#sentdex tkinter tutorial
-import matplotlib
-matplotlib.use("TkAgg")
-
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-from matplotlib.figure import Figure
-import matplotlib.animation as animation
-from matplotlib import style
-
 import tkinter as tk
+from tkinter import *
 from tkinter import ttk #css for tkinter
+from PIL import Image, ImageTk
+import time
 
 LARGE_FONT=("Times New Roman",12)
-style.use("ggplot")
 
-f = Figure(figsize=(5,5), dpi=100)
-a = f.add_subplot(111)
-
-def animate(i):
-    pullData = open("sampleData","r").read()
-    dataList = pullData.split('\n')
-    xList = []
-    yList = []
-    for eachLine in dataList:
-        if len(eachLine) > 1:
-            x,y = eachLine.split(',')
-            xList.append(int(x))
-            yList.append(int(y))
-
-    a.clear()
-    a.plot(xList,yList) 
-
-    
-            
-
-
-class Seaofbt(tk.Tk):
+class myapp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self,*args,**kwargs)
@@ -42,7 +14,7 @@ class Seaofbt(tk.Tk):
         #tk.Tk.iconbitmap(self,default="myicon.ico") #to add icons
         tk.Tk.wm_title(self, "My app")
         container = tk.Frame(self)
-
+        self.attributes("-fullscreen", True)
         container.pack(side="top", fill="both", expand=True)
 
         container.grid_rowconfigure(0, weight=1)
@@ -50,7 +22,7 @@ class Seaofbt(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, PageOne, PageTwo, PageThree):
+        for F in (StartPage, PageOne, PageTwo):
 
             frame = F(container, self)
 
@@ -68,31 +40,40 @@ class Seaofbt(tk.Tk):
 class StartPage(tk.Frame):
 
     def __init__(self,parent,controller):
+
+        
         tk.Frame.__init__(self,parent)
-        label = tk.Label(self,text="Start Page",font = LARGE_FONT)
-        label.pack(pady=10,padx=10)
 
-        button = ttk.Button(self, text="Visit Page 1", command = lambda:controller.show_frame(PageOne))
-        button.pack()
+                #adding image to start page:
+        logo = tk.PhotoImage(file="dalek.png")
+        BGlabel = tk.Label(self,image=logo)
+        BGlabel.image = logo
+        BGlabel.place(x=300,y=100,width=720,height=500)
+        label = tk.Label(self,text="Are you a human?",font = LARGE_FONT)
+        label.pack(pady=50,padx=100)
 
-        button2 = ttk.Button(self, text="Visit Page 2", command = lambda:controller.show_frame(PageTwo))
-        button2.pack()
+        
 
-        button3 = ttk.Button(self, text="Visit Page 3", command = lambda:controller.show_frame(PageThree))
-        button3.pack()
+        button = ttk.Button(self, text="Yes", command = lambda:controller.show_frame(PageOne))
+        button.place(x=500,y=650)
+
+        button2 = ttk.Button(self, text="No", command = quit)
+        button2.place(x=700,y=650)
+
 
 class PageOne(tk.Frame):
 
     def __init__(self,parent,controller):
         tk.Frame.__init__(self,parent)
-        label = tk.Label(self,text="Page 01",font = LARGE_FONT)
-        label.pack(pady=10,padx=10)
+        for i in range(50):
+            label = tk.Label(self,text="EXTERMINATE!    EXTERMINATE!    EXTERMINATE!    EXTERMINATE!    EXTERMINATE!    EXTERMINATE!",font = LARGE_FONT)
+            label.pack(pady=10,padx=10)
 
-        button1 = ttk.Button(self, text="Back to Home", command = lambda:controller.show_frame(StartPage))
-        button1.pack()
+        
+        #my_img = ImageTk.PhotoImage(Image.open("image.png"))
+        #my_label = Label(image=my_img)
+        #my_label.pack()
 
-        button2 = ttk.Button(self, text="Page Two", command = lambda:controller.show_frame(PageTwo))
-        button2.pack()
 
 class PageTwo(tk.Frame):
 
@@ -107,30 +88,10 @@ class PageTwo(tk.Frame):
         button2 = ttk.Button(self, text="Page One", command = lambda:controller.show_frame(PageOne))
         button2.pack()        
 
-class PageThree(tk.Frame):
 
-    def __init__(self,parent,controller):
-        tk.Frame.__init__(self,parent)
-        label = tk.Label(self,text="Page 03",font = LARGE_FONT)
-        label.pack(pady=10,padx=10)
-
-        button1 = ttk.Button(self, text="Back to Home", command = lambda:controller.show_frame(StartPage))
-        button1.pack()
-
-
-        canvas = FigureCanvasTkAgg(f, self)
-        canvas.draw()
-        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-
-        toolbar = NavigationToolbar2Tk(canvas, self)
-        toolbar.update()
-        canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
         
 
-app = Seaofbt()
-ani = animation.FuncAnimation(f, animate, interval=1000)
+app = myapp()
+
 app.mainloop()
-
-
-
