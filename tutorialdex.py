@@ -1,12 +1,19 @@
+import matplotlib
+matplotlib.use("TkAgg")
+import numpy as np
+
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.figure import Figure
+
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk #css for tkinter
-from PIL import Image, ImageTk
-import time
+from tkinter import ttk
 
 LARGE_FONT=("Times New Roman",12)
+x=np.linspace(-5,5,100)
 
-class myapp(tk.Tk):
+
+class MyApp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
         tk.Tk.__init__(self,*args,**kwargs)
@@ -14,7 +21,7 @@ class myapp(tk.Tk):
         #tk.Tk.iconbitmap(self,default="myicon.ico") #to add icons
         tk.Tk.wm_title(self, "My app")
         container = tk.Frame(self)
-        self.attributes("-fullscreen", True)
+
         container.pack(side="top", fill="both", expand=True)
 
         container.grid_rowconfigure(0, weight=1)
@@ -22,7 +29,7 @@ class myapp(tk.Tk):
 
         self.frames = {}
 
-        for F in (StartPage, PageOne, PageTwo):
+        for F in (StartPage, GraphPage):
 
             frame = F(container, self)
 
@@ -40,58 +47,58 @@ class myapp(tk.Tk):
 class StartPage(tk.Frame):
 
     def __init__(self,parent,controller):
-
-        
         tk.Frame.__init__(self,parent)
 
-                #adding image to start page:
-        logo = tk.PhotoImage(file="dalek.png")
-        BGlabel = tk.Label(self,image=logo)
-        BGlabel.image = logo
-        BGlabel.place(x=300,y=100,width=720,height=500)
-        label = tk.Label(self,text="Are you a human?",font = LARGE_FONT)
-        label.pack(pady=50,padx=100)
 
-        
-
-        button = ttk.Button(self, text="Yes", command = lambda:controller.show_frame(PageOne))
-        button.place(x=500,y=650)
-
-        button2 = ttk.Button(self, text="No", command = quit)
-        button2.place(x=700,y=650)
+        label = tk.Label(self,text="Ed. App - Start Page",font = LARGE_FONT)
+        label.pack(pady=10,padx=10)
 
 
-class PageOne(tk.Frame):
+        button3 = ttk.Button(self, text="Go to graph page ->", command = lambda:controller.show_frame(GraphPage))
+        button3.pack()
+
+
+
+
+class GraphPage(tk.Frame):
 
     def __init__(self,parent,controller):
         tk.Frame.__init__(self,parent)
-        for i in range(50):
-            label = tk.Label(self,text="EXTERMINATE!    EXTERMINATE!    EXTERMINATE!    EXTERMINATE!    EXTERMINATE!    EXTERMINATE!",font = LARGE_FONT)
-            label.pack(pady=10,padx=10)
-
         
-        #my_img = ImageTk.PhotoImage(Image.open("image.png"))
-        #my_label = Label(image=my_img)
-        #my_label.pack()
 
-
-class PageTwo(tk.Frame):
-
-    def __init__(self,parent,controller):
-        tk.Frame.__init__(self,parent)
-        label = tk.Label(self,text="Page 02",font = LARGE_FONT)
+        e = Entry(self, width =50)
+        e.pack()
+        label = tk.Label(self,text="Graph your function!",font = LARGE_FONT)
         label.pack(pady=10,padx=10)
 
         button1 = ttk.Button(self, text="Back to Home", command = lambda:controller.show_frame(StartPage))
         button1.pack()
 
-        button2 = ttk.Button(self, text="Page One", command = lambda:controller.show_frame(PageOne))
-        button2.pack()        
+        f = Figure(figsize=(5,5), dpi=100)
+        a = f.add_subplot(111)
+
+        def myClick():
+           # y = e.get() i'd like something like this to work, instead of line below
+            y = eval(e.get())
+            a.plot(x,y,'r')
+            canvas = FigureCanvasTkAgg(f, self)
+            canvas.draw()
+            canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+            toolbar = NavigationToolbar2Tk(canvas, self)
+            toolbar.update()
+            canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+                    
+               
+
+        button4 = ttk.Button(self, text="plot", command = myClick)
+        button4.pack()
+
+
 
 
 
         
 
-app = myapp()
-
+app = MyApp()
 app.mainloop()
