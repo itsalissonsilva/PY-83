@@ -12,93 +12,159 @@ from tkinter import ttk
 LARGE_FONT=("Times New Roman",12)
 x=np.linspace(-5,5,100)
 
+root = Tk()
+root.title("PY-83")
 
-class MyApp(tk.Tk):
+e = Entry(root, width=35, borderwidth=5)
+e.grid(row =0, column=0,columnspan=3, padx=10, pady=10)
 
-    def __init__(self, *args, **kwargs):
-        tk.Tk.__init__(self,*args,**kwargs)
+#class Root(Tk):
+#    def _init_(self):
+ #       super(Root, self)._init_()
+  #      self.title("ooops")
+   #     self.minsize(640,400)
+    #    self.wm_iconbitmap('icon.ico')
 
-        #tk.Tk.iconbitmap(self,default="myicon.ico") #to add icons
-        tk.Tk.wm_title(self, "My app")
-        container = tk.Frame(self)
+    #def matplotCanvas(self):
+     #   f = Figure(figsize=(5,5), dpi=100)
+      #  a = f.add_subplot(111)
+       # a.plot([1,2,3,4,5,6,7,8], [5,6,1,3,8,9,3,5])
 
-        container.pack(side="top", fill="both", expand=True)
+        #canvas = FigureCanvasTkAgg(f,self)
+        #canvas.show()
+        #canvas.get_tk_widget().pack(side=BOTTOM, fill=BOTH, expand=True)
+    
 
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
+def button_click(number):
+    #e.delete(0, END)
+    current = e.get()
+    e.delete(0,END)
+    e.insert(0, str(current)+str(number))
+    return
 
-        self.frames = {}
+def button_clear():
+    e.delete(0,END)
 
-        for F in (StartPage, GraphPage):
+def button_add():
+    first_number = e.get()
+    global f_num
+    global math
+    math = "addition"
+    f_num = int(first_number)
+    e.delete(0, END)
 
-            frame = F(container, self)
+def button_equal():
+    second_number = e.get()
+    e.delete(0,END)
 
-            self.frames[F] = frame
+    if math == "addition":
+        e.insert(0, f_num + int(second_number))
 
-            frame.grid(row=0, column = 0, sticky="nsew")
+    if math == "subtraction":
+        e.insert(0, f_num - int(second_number))
 
-        self.show_frame(StartPage)
+    if math == "multiplication":
+        e.insert(0, f_num * int(second_number))
 
-    def show_frame(self, cont):
+    if math == "division":
+        e.insert(0, f_num / int(second_number))
+    
 
-        frame = self.frames[cont]
-        frame.tkraise()
-
-class StartPage(tk.Frame):
-
-    def __init__(self,parent,controller):
-        tk.Frame.__init__(self,parent)
-
-
-        label = tk.Label(self,text="Ed. App - Start Page",font = LARGE_FONT)
-        label.pack(pady=10,padx=10)
-
-
-        button3 = ttk.Button(self, text="Go to graph page ->", command = lambda:controller.show_frame(GraphPage))
-        button3.pack()
-
-
+def button_subtract():
+    first_number = e.get()
+    global f_num
+    global math
+    math = "subtraction"
+    f_num = int(first_number)
+    e.delete(0, END)
+    
+def button_multiply():
+    first_number = e.get()
+    global f_num
+    global math
+    math = "multiplication"
+    f_num = int(first_number)
+    e.delete(0, END)
 
 
-class GraphPage(tk.Frame):
+def button_divide():
+    first_number = e.get()
+    global f_num
+    global math
+    math = "division"
+    f_num = int(first_number)
+    e.delete(0, END)
 
-    def __init__(self,parent,controller):
-        tk.Frame.__init__(self,parent)
-        
 
-        e = Entry(self, width =50)
-        e.pack()
-        label = tk.Label(self,text="Graph your function!",font = LARGE_FONT)
-        label.pack(pady=10,padx=10)
 
-        button1 = ttk.Button(self, text="Back to Home", command = lambda:controller.show_frame(StartPage))
-        button1.pack()
+button_1 = Button(root, text="1", padx=40,pady=20,command=lambda: button_click(1))
+button_2 = Button(root, text="2", padx=40,pady=20,command=lambda: button_click(2))
+button_3 = Button(root, text="3", padx=40,pady=20,command=lambda: button_click(3))
+button_4 = Button(root, text="4", padx=40,pady=20,command=lambda: button_click(4))
+button_5 = Button(root, text="5", padx=40,pady=20,command=lambda: button_click(5))
+button_6 = Button(root, text="6", padx=40,pady=20,command=lambda: button_click(6))
+button_7 = Button(root, text="7", padx=40,pady=20,command=lambda: button_click(7))
+button_8 = Button(root, text="8", padx=40,pady=20,command=lambda: button_click(8))
+button_9 = Button(root, text="9", padx=40,pady=20,command=lambda: button_click(9))
+button_0 = Button(root, text="0", padx=40,pady=20,command=lambda:button_click(0))
+button_add = Button(root, text="+", padx=39, pady=20, command=button_add)
+button_equal = Button(root, text="=", padx=91, pady=20, command=button_equal)
+button_clear = Button(root, text="Clear", padx=79, pady=20, command=button_clear)
 
-        f = Figure(figsize=(5,5), dpi=100)
-        a = f.add_subplot(111)
+button_subtract = Button(root, text="-", padx=40, pady=20, command=button_subtract)
+button_multiply = Button(root, text="×", padx=39, pady=20, command=button_multiply)
+button_divide = Button(root, text="÷", padx=39, pady=20, command=button_divide)
 
-        def myClick():
+
+button_1.grid(row=3,column=0)
+button_2.grid(row=3,column=1)
+button_3.grid(row=3,column=2)
+
+button_4.grid(row=2,column=0)
+button_5.grid(row=2,column=1)
+button_6.grid(row=2,column=2)
+
+button_7.grid(row=1,column=0)
+button_8.grid(row=1,column=1)
+button_9.grid(row=1,column=2)
+
+button_0.grid(row=4,column=0)
+button_clear.grid(row=4, column=1, columnspan=2)
+button_add.grid(row=5,column=0)
+button_equal.grid(row=5, column=1, columnspan=2)
+
+button_subtract.grid(row=6, column=0)
+button_multiply.grid(row=6, column=1)
+button_divide.grid(row=6, column=2)
+
+
+#graphpartstartshere
+
+ent = Entry(root, width =50)
+ent.grid(row =1, column=0,columnspan=3, padx=10, pady=10)
+
+
+
+f = Figure(figsize=(5,5), dpi=100)
+a = f.add_subplot(111)
+
+def myClick():
            # y = e.get() i'd like something like this to work, instead of line below
-            y = eval(e.get())
-            a.plot(x,y,'r')
-            canvas = FigureCanvasTkAgg(f, self)
-            canvas.draw()
-            canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+    y = eval(ent.get())
+    a.plot(x,y,'r')
+    canvas = FigureCanvasTkAgg(f, root)
+    canvas.draw()
+    canvas.get_tk_widget().grid()
 
-            toolbar = NavigationToolbar2Tk(canvas, self)
-            toolbar.update()
-            canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+    toolbar = NavigationToolbar2Tk(canvas, root)
+    toolbar.update()
+    canvas._tkcanvas.grid()
                     
                
 
-        button4 = ttk.Button(self, text="plot", command = myClick)
-        button4.pack()
+button4 = Button(root, text="plot", command = myClick)
+button4.grid(row=7,column=2)
 
 
 
-
-
-        
-
-app = MyApp()
-app.mainloop()
+root.mainloop()
