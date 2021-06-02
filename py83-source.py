@@ -1,82 +1,61 @@
-import matplotlib
-matplotlib.use("TkAgg")
+import tkinter
 import numpy as np
-
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from tkinter import *
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 
-import tkinter as tk
-from tkinter import *
-from tkinter import ttk
 
-LARGE_FONT=("Times New Roman",12)
+
+root = tkinter.Tk()
+root.geometry("400x680")
+root.wm_title("PY-83")
+
+#setting up graphing grid on canvas:
+fig = Figure(figsize=(5, 3), dpi=100)
+a = fig.add_subplot(111)
+canvas = FigureCanvasTkAgg(fig, master=root)
+canvas.get_tk_widget().pack(side=tkinter.TOP)
+
+#setting up interval for plotting:
 x=np.linspace(-5,5,100)
 
-root = Tk()
-root.title("PY-83")
+#plotting function:
+def plot():
+    y = eval(e.get())
+    lines = a.plot(x,y,'r')
+    canvas.draw()
 
-e = Entry(root, width=35, borderwidth=5)
-e.grid(row =1, column=0,columnspan=3, padx=10, pady=10)
+#setting up toolbar:
+toolbar = NavigationToolbar2Tk(canvas, root)
+toolbar.update()
+canvas.get_tk_widget().pack(side=tkinter.TOP)
 
-#class Root(Tk):
-#    def _init_(self):
- #       super(Root, self)._init_()
-  #      self.title("ooops")
-   #     self.minsize(640,400)
-    #    self.wm_iconbitmap('icon.ico')
 
-    #def matplotCanvas(self):
-     #   f = Figure(figsize=(5,5), dpi=100)
-      #  a = f.add_subplot(111)
-       # a.plot([1,2,3,4,5,6,7,8], [5,6,1,3,8,9,3,5])
 
-        #canvas = FigureCanvasTkAgg(f,self)
-        #canvas.show()
-        #canvas.get_tk_widget().pack(side=BOTTOM, fill=BOTH, expand=True)
-    
-
+#adding number to the screen:
 def button_click(number):
-    #e.delete(0, END)
     current = e.get()
     e.delete(0,END)
     e.insert(0, str(current)+str(number))
     return
 
-def button_clear():
-    e.delete(0,END)
-    f.clf()
-
+#four basic operations
 def button_add():
     first_number = e.get()
     global f_num
     global math
     math = "addition"
-    f_num = int(first_number)
+    f_num = float(first_number)
     e.delete(0, END)
-
-def button_equal():
-    second_number = e.get()
-    e.delete(0,END)
-
-    if math == "addition":
-        e.insert(0, f_num + int(second_number))
-
-    if math == "subtraction":
-        e.insert(0, f_num - int(second_number))
-
-    if math == "multiplication":
-        e.insert(0, f_num * int(second_number))
-
-    if math == "division":
-        e.insert(0, f_num / int(second_number))
-    
 
 def button_subtract():
     first_number = e.get()
     global f_num
     global math
     math = "subtraction"
-    f_num = int(first_number)
+    f_num = float(first_number)
     e.delete(0, END)
     
 def button_multiply():
@@ -84,7 +63,7 @@ def button_multiply():
     global f_num
     global math
     math = "multiplication"
-    f_num = int(first_number)
+    f_num = float(first_number)
     e.delete(0, END)
 
 
@@ -93,96 +72,90 @@ def button_divide():
     global f_num
     global math
     math = "division"
-    f_num = int(first_number)
+    f_num = float(first_number)
     e.delete(0, END)
 
+#equal sign
+def button_equal():
+    second_number = e.get()
+    e.delete(0,END)
 
+    if math == "addition":
+        e.insert(0, f_num + float(second_number))
 
-button_1 = Button(root, text="1", padx=40,pady=10,command=lambda: button_click(1))
-button_2 = Button(root, text="2", padx=40,pady=10,command=lambda: button_click(2))
-button_3 = Button(root, text="3", padx=40,pady=10,command=lambda: button_click(3))
-button_4 = Button(root, text="4", padx=40,pady=10,command=lambda: button_click(4))
-button_5 = Button(root, text="5", padx=40,pady=10,command=lambda: button_click(5))
-button_6 = Button(root, text="6", padx=40,pady=10,command=lambda: button_click(6))
-button_7 = Button(root, text="7", padx=40,pady=10,command=lambda: button_click(7))
-button_8 = Button(root, text="8", padx=40,pady=10,command=lambda: button_click(8))
-button_9 = Button(root, text="9", padx=40,pady=10,command=lambda: button_click(9))
-button_0 = Button(root, text="0", padx=40,pady=10,command=lambda:button_click(0))
-button_add = Button(root, text="+", padx=39, pady=10, command=button_add)
-button_equal = Button(root, text="=", padx=91, pady=10, command=button_equal)
-button_clear = Button(root, text="Clear", padx=79, pady=10, command=button_clear)
+    if math == "subtraction":
+        e.insert(0, f_num - float(second_number))
 
-button_subtract = Button(root, text="-", padx=40, pady=10, command=button_subtract)
-button_multiply = Button(root, text="×", padx=39, pady=10, command=button_multiply)
-button_divide = Button(root, text="÷", padx=39, pady=10, command=button_divide)
+    if math == "multiplication":
+        e.insert(0, f_num * float(second_number))
 
+    if math == "division":
+        e.insert(0, f_num / float(second_number))
 
-button_1.grid(row=4,column=0)
-button_2.grid(row=4,column=1)
-button_3.grid(row=4,column=2)
-
-button_4.grid(row=3,column=0)
-button_5.grid(row=3,column=1)
-button_6.grid(row=3,column=2)
-
-button_7.grid(row=2,column=0)
-button_8.grid(row=2,column=1)
-button_9.grid(row=2,column=2)
-
-button_0.grid(row=5,column=0)
-button_clear.grid(row=5, column=1, columnspan=2)
-button_add.grid(row=6,column=0)
-button_equal.grid(row=6, column=1, columnspan=2)
-
-button_subtract.grid(row=7, column=0)
-button_multiply.grid(row=7, column=1)
-button_divide.grid(row=7, column=2)
-
-
-#graphpartstartshere
-
-#ent = Entry(root, width =50)
-#ent.grid(row =1, column=0,columnspan=3, padx=10, pady=10)
-
-
-
-f = Figure(figsize=(4,3), dpi=100)
-a = f.add_subplot(111)
-canvas = FigureCanvasTkAgg(f, root)
-canvas.draw()
-canvas.get_tk_widget().grid(row=0,column=1)
-    #canvas = FigureCanvasTkAgg(f, root)
-    #canvas.draw()
-    #canvas.get_tk_widget().grid(row=0)#couldmodify this whole part can be
-    #brought outside...
-
-#toolbar = NavigationToolbar2Tk(canvas, root)
-#toolbar.update()
-canvas._tkcanvas.grid(row=0)#couldmodify
-
-    
-def myClick():
-           # y = e.get() i'd like something like this to work, instead of line below
-    y = eval(e.get())
-    a.plot(x,y,'r')
-    canvas = FigureCanvasTkAgg(f, root)
+#clear entry and screen
+def button_clear():
+    e.delete(0,END)
+    a.lines=[]
     canvas.draw()
-    canvas.get_tk_widget().grid(row=0,column=1)
-    #canvas = FigureCanvasTkAgg(f, root)
-    #canvas.draw()
-    #canvas.get_tk_widget().grid(row=0)#couldmodify this whole part can be
-    #brought outside...
 
-    toolbar = NavigationToolbar2Tk(canvas, root)
-    toolbar.update()
-    canvas._tkcanvas.grid(row=0)#couldmodify
-                    
-               
+#placing buttons on screen: 
+button_1 = Button(root, text="1",padx=40,pady=20, command=lambda:button_click(1))
+button_2 = Button(root, text="2",padx=40,pady=20, command=lambda:button_click(2))
+button_3 = Button(root, text="3",padx=40,pady=20, command=lambda:button_click(3))
 
-button4 = Button(root, text="plot", command = myClick)
-button4.grid(row=1,column=2)
+button_4 = Button(root, text="4",padx=40,pady=20, command=lambda:button_click(4))
+button_5 = Button(root, text="5",padx=40,pady=20, command=lambda:button_click(5))
+button_6 = Button(root, text="6",padx=40,pady=20, command=lambda:button_click(6))
+
+button_7 = Button(root, text="7",padx=40,pady=20, command=lambda:button_click(7))
+button_8 = Button(root, text="8",padx=40,pady=20, command=lambda:button_click(8))
+button_9 = Button(root, text="9",padx=40,pady=20, command=lambda:button_click(9))
+
+button_0 = Button(root, text="0",padx=40,pady=20, command=lambda:button_click(0))
+button_equal = Button(root, text="=",padx=40,pady=20, command=button_equal, bg="#EA3C53")
+button_divide = Button(root, text="÷",padx=40,pady=20, command=button_divide, bg="#89CFF0")
+
+button_add = Button(root, text="+",padx=40,pady=20, command=button_add, bg="#89CFF0")
+button_minus = Button(root, text="-",padx=40,pady=20, command=button_subtract, bg="#89CFF0")
+button_mult = Button(root, text="×",padx=40,pady=20, command=button_multiply, bg="#89CFF0")
+button_dot = Button(root, text=".",padx=40,pady=20, command=lambda:button_click("."))
+
+button_clear = Button(root, text="Clear",padx=53,pady=4, command=button_clear)
+
+button_plot = Button(root, text="Plot",padx=30,pady=4, command=plot, bg="#A0D6B4")
 
 
 
-root.mainloop()
+button_plot.place(x=300,y=310)
 
+button_7.place(x=0,y=350)
+button_8.place(x=100,y=350)
+button_9.place(x=200,y=350)
+
+button_4.place(x=0,y=420)
+button_5.place(x=100,y=420)
+button_6.place(x=200,y=420)
+
+button_1.place(x=0,y=490)
+button_2.place(x=100,y=490)
+button_3.place(x=200,y=490)
+
+button_0.place(x=0,y=560)
+button_dot.place(x=100,y=560)
+button_equal.place(x=200,y=560)
+
+button_add.place(x=300,y=350)
+button_minus.place(x=300,y=420)
+button_mult.place(x=300,y=490)
+button_divide.place(x=300,y=560)
+
+button_clear.place(x=250,y=640)
+
+#placing entry on the screen:
+e = Entry(root, width = 45, borderwidth=5)
+e.place(x=10,y=310)
+#functions inputed on the entry are plotted on the screen, try something like x**2
+#other functions need to be typed with reference to np as np.sin(x) or np.exp(x), for example
+
+
+tkinter.mainloop()
